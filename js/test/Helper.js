@@ -3,10 +3,6 @@ var common = require('../common');
 
 describe('Helper', function () {
     describe('secondsToHuman', function () {
-        after(function () {
-            cleanup();
-        });
-
         jsc.property('returns an array with a number and a word', 'integer', function (number) {
             var result = $.PrivateBin.Helper.secondsToHuman(number);
             return Array.isArray(result) &&
@@ -57,11 +53,11 @@ describe('Helper', function () {
             'nearray string',
             function (ids, contents) {
                 var html = '',
-                    result = true;
+                    result = true,
+                    clean = jsdom(html);
                 ids.forEach(function(item, i) {
-                    html += '<div id="' + item.join('') + '">' + common.htmlEntities(contents[i] || contents[0]) + '</div>';
+                    html += '<div id="' + item.join('') + '">' + $.PrivateBin.Helper.htmlEntities(contents[i] || contents[0]) + '</div>';
                 });
-                var clean = jsdom(html);
                 // TODO: As per https://github.com/tmpvar/jsdom/issues/321 there is no getSelection in jsdom, yet.
                 // Once there is one, uncomment the block below to actually check the result.
                 /*
@@ -77,15 +73,24 @@ describe('Helper', function () {
     });
 
     describe('urls2links', function () {
-        after(function () {
-            cleanup();
+        this.timeout(30000);
+        before(function () {
+            cleanup = jsdom();
         });
 
         jsc.property(
             'ignores non-URL content',
             'string',
             function (content) {
-                return content === $.PrivateBin.Helper.urls2links(content);
+                content = content.replace(/\r|\f/g, '\n').replace(/\u0000/g, '').replace(/\u000b/g, '');
+                let clean = jsdom();
+                $('body').html('<div id="foo"></div>');
+                let e = $('#foo');
+                e.text(content);
+                $.PrivateBin.Helper.urls2links(e);
+                let result = e.text();
+                clean();
+                return content === result;
             }
         );
         jsc.property(
@@ -97,11 +102,14 @@ describe('Helper', function () {
             jsc.array(common.jscHashString()),
             'string',
             function (prefix, schema, address, query, fragment, postfix) {
-                var query = query.join(''),
-                    fragment = fragment.join(''),
-                    url = schema + '://' + address.join('') + '/?' + query + '#' + fragment,
-                    prefix = common.htmlEntities(prefix),
-                    postfix = ' ' + common.htmlEntities(postfix);
+                query    = query.join('');
+                fragment = fragment.join('');
+                prefix = prefix.replace(/\r|\f/g, '\n').replace(/\u0000/g, '').replace(/\u000b/g, '');
+                postfix  = ' ' + postfix.replace(/\r/g, '\n').replace(/\u0000/g, '');
+                let url  = schema + '://' + address.join('') + '/?' + query + '#' + fragment,
+                    clean = jsdom();
+                $('body').html('<div id="foo"></div>');
+                let e = $('#foo');
 
                 // special cases: When the query string and fragment imply the beginning of an HTML entity, eg. &#0 or &#x
                 if (
@@ -112,8 +120,12 @@ describe('Helper', function () {
                     url = schema + '://' + address.join('') + '/?' + query.substring(0, query.length - 1);
                     postfix = '';
                 }
-
-                return prefix + '<a href="' + url + '" rel="nofollow">' + url + '</a>' + postfix === $.PrivateBin.Helper.urls2links(prefix + url + postfix);
+                e.text(prefix + url + postfix);
+                $.PrivateBin.Helper.urls2links(e);
+                let result = e.html();
+                clean();
+                url = $('<div />').text(url).html();
+                return $('<div />').text(prefix).html() + '<a href="' + url + '" target="_blank" rel="nofollow noopener noreferrer">' + url + '</a>' + $('<div />').text(postfix).html() === result;
             }
         );
         jsc.property(
@@ -122,19 +134,23 @@ describe('Helper', function () {
             jsc.array(common.jscQueryString()),
             'string',
             function (prefix, query, postfix) {
-                var url = 'magnet:?' + query.join('').replace(/^&+|&+$/gm,''),
-                    prefix = common.htmlEntities(prefix),
-                    postfix = common.htmlEntities(postfix);
-                return prefix + '<a href="' + url + '" rel="nofollow">' + url + '</a> ' + postfix === $.PrivateBin.Helper.urls2links(prefix + url + ' ' + postfix);
+                prefix = prefix.replace(/\r|\f/g, '\n').replace(/\u0000/g, '').replace(/\u000b/g, '');
+                postfix = ' ' + postfix.replace(/\r/g, '\n').replace(/\u0000/g, '');
+                let url  = 'magnet:?' + query.join('').replace(/^&+|&+$/gm,''),
+                    clean = jsdom();
+                $('body').html('<div id="foo"></div>');
+                let e = $('#foo');
+                e.text(prefix + url + postfix);
+                $.PrivateBin.Helper.urls2links(e);
+                let result = e.html();
+                clean();
+                url = $('<div />').text(url).html();
+                return $('<div />').text(prefix).html() + '<a href="' + url + '" target="_blank" rel="nofollow noopener noreferrer">' + url + '</a>' + $('<div />').text(postfix).html() === result;
             }
         );
     });
 
     describe('sprintf', function () {
-        after(function () {
-            cleanup();
-        });
-
         jsc.property(
             'replaces %s in strings with first given parameter',
             'string',
@@ -183,9 +199,9 @@ describe('Helper', function () {
             'string',
             'string',
             function (prefix, uint, middle, string, postfix) {
-                prefix  =  prefix.replace(/%(s|d)/g, '%%');
-                middle  =  middle.replace(/%(s|d)/g, '%%');
-                postfix = postfix.replace(/%(s|d)/g, '%%');
+                prefix  =  prefix.replace(/%(s|d)/g, '');
+                middle  =  middle.replace(/%(s|d)/g, '');
+                postfix = postfix.replace(/%(s|d)/g, '');
                 var params = [prefix + '%d' + middle + '%s' + postfix, uint, string],
                     result = prefix + uint + middle + string + postfix;
                 return result === $.PrivateBin.Helper.sprintf.apply(this, params);
@@ -199,9 +215,9 @@ describe('Helper', function () {
             'string',
             'string',
             function (prefix, uint, middle, string, postfix) {
-                prefix  =  prefix.replace(/%(s|d)/g, '%%');
-                middle  =  middle.replace(/%(s|d)/g, '%%');
-                postfix = postfix.replace(/%(s|d)/g, '%%');
+                prefix  =  prefix.replace(/%(s|d)/g, '');
+                middle  =  middle.replace(/%(s|d)/g, '');
+                postfix = postfix.replace(/%(s|d)/g, '');
                 var params = [prefix + '%s' + middle + '%d' + postfix, string, uint],
                     result = prefix + string + middle + uint + postfix;
                 return result === $.PrivateBin.Helper.sprintf.apply(this, params);
@@ -211,7 +227,7 @@ describe('Helper', function () {
 
     describe('getCookie', function () {
         this.timeout(30000);
-        after(function () {
+        before(function () {
             cleanup();
         });
 
@@ -263,16 +279,16 @@ describe('Helper', function () {
     });
 
     describe('htmlEntities', function () {
-        after(function () {
-            cleanup();
+        before(function () {
+            cleanup = jsdom();
         });
 
         jsc.property(
             'removes all HTML entities from any given string',
             'string',
             function (string) {
-                var result = common.htmlEntities(string);
-                return !(/[<>"'`=\/]/.test(result)) && !(string.indexOf('&') > -1 && !(/&amp;/.test(result)));
+                var result = $.PrivateBin.Helper.htmlEntities(string);
+                return !(/[<>]/.test(result)) && !(string.indexOf('&') > -1 && !(/&amp;/.test(result)));
             }
         );
     });

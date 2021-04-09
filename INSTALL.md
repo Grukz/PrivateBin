@@ -9,21 +9,21 @@ options](#configuration) to adjust as you see fit.
 
 **NOTE:** See [our FAQ](https://github.com/PrivateBin/PrivateBin/wiki/FAQ#how-can-i-securely-clonedownload-your-project) for information how to securely download the PrivateBin release files.
 
+**NOTE:** There is a [ansible](https://ansible.com) role by @e1mo available to install and configure PrivateBin on your server. It's available on [ansible galaxy](https://galaxy.ansible.com/e1mo/privatebin) ([source code](https://git.sr.ht/~e1mo/ansible-role-privatebin)).
+
 ### Minimal requirements
 
-- PHP version 5.5 or above
-- _one_ of the following sources of cryptographically safe randomness is required:
-  - PHP 7 or higher
-  - [Libsodium](https://download.libsodium.org/libsodium/content/installation/) and it's [PHP extension](https://paragonie.com/book/pecl-libsodium/read/00-intro.md#installing-libsodium)
-  - open_basedir access to `/dev/urandom`
-  - mcrypt extension
-  - com_dotnet extension
-  
-  Mcrypt needs to be able to access `/dev/urandom`. This means if `open_basedir` is set, it must include this file.
+- PHP version 7.0 or above
+  - Or PHP version 5.6 AND _one_ of the following sources of cryptographically safe randomness:
+    - [Libsodium](https://download.libsodium.org/libsodium/content/installation/) and it's [PHP extension](https://paragonie.com/book/pecl-libsodium/read/00-intro.md#installing-libsodium)
+    - open_basedir access to `/dev/urandom`
+    - mcrypt extension (mcrypt needs to be able to access `/dev/urandom`. This means if `open_basedir` is set, it must include this file.)
+    - com_dotnet extension
 - GD extension
-- some disk space or (optionally) a database supported by [PDO](https://secure.php.net/manual/book.pdo.php)
+- zlib extension
+- some disk space or (optionally) a database supported by [PDO](https://php.net/manual/book.pdo.php)
 - ability to create files and folders in the installation directory and the PATH defined in index.php
-- A web browser with javascript support
+- A web browser with JavaScript support
 
 ## Hardening and security
 
@@ -43,17 +43,38 @@ process (see also
 >
 > The full path of PrivateBin on your webserver is:
 > /home/example.com/htdocs/paste
-> 
+>
 > When setting the path like this:
 > define('PATH', '../../secret/privatebin/');
 >
 > PrivateBin will look for your includes / data here:
 > /home/example.com/secret/privatebin
 
+### Changing the config path only
+
+In situations where you want to keep the PrivateBin static files separate from the
+rest of your data, or you want to reuse the installation files on multiple vhosts,
+you may only want to change the `conf.php`. In this instance, you can set the
+`CONFIG_PATH` environment variable to the absolute path to the `conf.php` file.
+This can be done in your web server's virtual host config, the PHP config, or in
+the index.php if you choose to customize it.
+
+Note that your PHP process will need read access to the config wherever it may be.
+
+> #### CONFIG_PATH example
+> Setting the value in an Apache Vhost:
+> SetEnv CONFIG_PATH /var/lib/privatebin/conf.php
+>
+> In a php-fpm pool config:
+> env[CONFIG_PATH] = /var/lib/privatebin/conf.php
+>
+> In the index.php, near the top:
+> putenv('CONFIG_PATH=/var/lib/privatebin/conf.php');
+
 ### Transport security
 
 When setting up PrivateBin, also set up HTTPS, if you haven't already. Without HTTPS
-PrivateBin is not secure, as the javascript files could be manipulated during transmission.
+PrivateBin is not secure, as the JavaScript files could be manipulated during transmission.
 For more information on this, see our [FAQ entry on HTTPS setup](https://github.com/PrivateBin/PrivateBin/wiki/FAQ#how-should-i-setup-https).
 
 ### File-level permissions
@@ -66,8 +87,9 @@ See [this FAQ item](https://github.com/PrivateBin/PrivateBin/wiki/FAQ#what-are-t
 
 In the file `cfg/conf.php` you can configure PrivateBin. A `cfg/conf.sample.php`
 is provided containing all options and default values. You can copy it to
-`cfg/conf.php` and adapt it as needed. The config file is divided into multiple
-sections, which are enclosed in square brackets.
+`cfg/conf.php` and adapt it as needed. Alternatively you can copy it anywhere and
+set the `CONFIG_PATH` environment variable (see above notes). The config file is
+divided into multiple sections, which are enclosed in square brackets.
 
 In the `[main]` section you can enable or disable the discussion feature, set
 the limit of stored pastes and comments in bytes. The `[traffic]` section lets
@@ -139,7 +161,7 @@ For reference or if you want to create the table schema for yourself to avoid ha
 ```sql
 CREATE TABLE prefix_paste (
     dataid CHAR(16) NOT NULL,
-    data BLOB,
+    data MEDIUMBLOB,
     postdate INT,
     expiredate INT,
     opendiscussion INT,
@@ -165,7 +187,7 @@ CREATE INDEX parent ON prefix_comment(pasteid);
 CREATE TABLE prefix_config (
     id CHAR(16) NOT NULL, value TEXT, PRIMARY KEY (id)
 );
-INSERT INTO prefix_config VALUES('VERSION', '1.2.1');
+INSERT INTO prefix_config VALUES('VERSION', '1.3.5');
 ```
 
 In **PostgreSQL**, the data, attachment, nickname and vizhash columns needs to be TEXT and not BLOB or MEDIUMBLOB.

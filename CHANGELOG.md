@@ -1,6 +1,67 @@
 # PrivateBin version history
 
-  * **1.3 (not yet released)**
+  * **1.4 (not yet released)**
+  * **1.3.5 (2021-04-05)**
+    * ADDED: Translation for Hebrew, Lithuanian, Indonesian and Catalan
+    * ADDED: Make the project info configurable (#681)
+    * CHANGED: Upgrading libraries to: DOMpurify 2.2.7, kjua 0.9.0 & random_compat 2.0.18
+    * CHANGED: Open all links in new window (#630)
+    * FIXED: PDF display in Firefox (#630)
+    * FIXED: Allow pasting into password input dialog (#630)
+    * FIXED: Display of expiration date in email (#630)
+    * FIXED: Allow display of durations in weeks (#630)
+    * FIXED: Avoid exposing burn-after-reading messages from cache (#630)
+    * FIXED: Only display the dropzone when it should (#630)
+    * FIXED: Detect delete token properly (#630)
+    * FIXED: Sanitize output from `Helper.urls2links()` (#630)
+    * FIXED: Avoid recreation of existing pasteurl element when calling URL shortener (#630)
+    * FIXED: Downloads in Chrome >= 83 (#634)
+    * FIXED: Display of empty files (#663)
+    * FIXED: Improve OpenGraph attributes (#651)
+    * FIXED: Reset to configured burn-after-reading, discussion and expiration settings (#682)
+    * FIXED: Italic segment of project information (#756)
+  * **1.3.4 (2020-03-22)**
+    * CHANGED: Minimum required PHP version is 5.6, due to a change in the identicon library and to use php's native hash_equals()
+    * CHANGED: Upgrading libraries to: identicon 2.0.0
+    * FIXED: Support custom expiration options in email function (#586)
+    * FIXED: Regression with encoding of HTML entities (#588)
+    * FIXED: Unable to paste password on paste with attachment (#565 & #595)
+  * **1.3.3 (2020-02-16)**
+    * CHANGED: Upgrading libraries to: DOMpurify 2.0.8
+    * CHANGED: Several translations got updated with missing messages
+    * CHANGED: Introduce HTML entity encoding on server side (#581)
+    * FIXED: HTML entity double encoding issues introduced in 1.3.2 (#560)
+  * **1.2.3 (2020-02-16)**
+    * CHANGED: Upgrading libraries to: DOMpurify 2.0.8
+    * CHANGED: Introduce HTML entity encoding on server side (#581)
+    * FIXED: HTML entity double encoding issues introduced in 1.3.2 (#560)
+  * **1.3.2 (2020-01-11)**
+    * ADDED: Translation for Ukrainian (#533)
+    * ADDED: Option to send a mail with the link, when creating a paste (#398)
+    * ADDED: Add support for CONFIG_PATH environment variable (#552)
+    * CHANGED: Upgrading libraries to: base-x 3.0.7, DOMpurify 2.0.7 & Showdown 1.9.1
+    * FIXED: HTML injection via unescaped attachment filename (#554)
+    * FIXED: Password disabling option (#527)
+  * **1.2.2 (2020-01-11)**
+    * CHANGED: Upgrading libraries to: bootstrap 3.4.1, DOMpurify 2.0.7, jQuery 3.4.1, kjua 0.6.0, Showdown 1.9.1 & SJCL 1.0.8
+    * FIXED: HTML injection via unescaped attachment filename (#554)
+  * **1.3.1 (2019-09-22)**
+    * ADDED: Translation for Bulgarian (#455)
+    * CHANGED: Improved mobile UI - obscured send button and hard to click shortener button (#477)
+    * CHANGED: Enhanced URL shortener integration (#479)
+    * CHANGED: Improved file upload drag & drop UI (#317)
+    * CHANGED: Increased default size limit from 2 to 10 MiB, switch data from BLOB to MEDIUMBLOB in MySQL (#458)
+    * CHANGED: Upgrading libraries to: DOMpurify 2.0.1
+    * FIXED: Enabling browsers without WASM to create pastes and read uncompressed ones (#454)
+    * FIXED: Cloning related issues (#489, #491, #493, #494)
+    * FIXED: Enable file operation only when editing (#497) 
+    * FIXED: Clicking 'New' on a previously submitted paste does not blank address bar (#354)
+    * FIXED: Clear address bar when create new paste from existing paste (#479)
+    * FIXED: Discussion section not hiding when new/clone paste is clicked on (#484)
+    * FIXED: Showdown.js error when posting svg qrcode (#485)
+    * FIXED: Failed to handle the case where user cancelled attachment selection properly (#487)
+    * FIXED: Displaying the appropriate errors in older browsers (#508)
+  * **1.3 (2019-07-09)**
     * ADDED: Translation for Czech (#424)
     * ADDED: Threat modeled the application (#177)
     * ADDED: Made compression configurable (#38)

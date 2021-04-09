@@ -7,6 +7,10 @@
 ; (optional) set a project name to be displayed on the website
 ; name = "PrivateBin"
 
+; The full URL, with the domain name and directories that point to the PrivateBin files
+; This URL is essential to allow Opengraph images to be displayed on social networks
+; basepath = ""
+
 ; enable or disable the discussion feature, defaults to true
 discussion = true
 
@@ -29,11 +33,15 @@ defaultformatter = "plaintext"
 ; (optional) set a syntax highlighting theme, as found in css/prettify/
 ; syntaxhighlightingtheme = "sons-of-obsidian"
 
-; size limit per paste or comment in bytes, defaults to 2 Mebibytes
-sizelimit = 2097152
+; size limit per paste or comment in bytes, defaults to 10 Mebibytes
+sizelimit = 10485760
 
 ; template to include, default is "bootstrap" (tpl/bootstrap.php)
 template = "bootstrap"
+
+; (optional) info text to display
+; use single, instead of double quotes for HTML attributes
+;info = "More information on the <a href='https://privatebin.info/'>project page</a>."
 
 ; (optional) notice to display
 ; notice = "Note: This is a test service: Data may be deleted anytime. Kittens will die if you abuse this service."
@@ -60,17 +68,26 @@ languageselection = false
 ; a different user when the same username was used in a comment. It might be
 ; used to get the IP of a non anonymous comment poster if the server salt is
 ; leaked and a SHA256 HMAC rainbow table is generated for all (relevant) IPs.
-; Can be set to one these values: none / vizhash / identicon (default).
-; icon = none
+; Can be set to one these values: "none" / "vizhash" / "identicon" (default).
+; icon = "none"
 
 ; Content Security Policy headers allow a website to restrict what sources are
 ; allowed to be accessed in its context. You need to change this if you added
 ; custom scripts from third-party domains to your templates, e.g. tracking
 ; scripts or run your site behind certain DDoS-protection services.
 ; Check the documentation at https://content-security-policy.com/
-; Note: If you use a bootstrap theme, you can remove the allow-popups from the sandbox restrictions.
-; By default this disallows to load images from third-party servers, e.g. when they are embedded in pastes. If you wish to allow that, you can adjust the policy here. See https://github.com/PrivateBin/PrivateBin/wiki/FAQ#why-does-not-it-load-embedded-images for details.
-; cspheader = "default-src 'none'; manifest-src 'self'; connect-src *; script-src 'self' 'unsafe-eval'; style-src 'self'; font-src 'self'; img-src 'self' data: blob:; media-src blob:; object-src blob:; sandbox allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
+; Notes:
+; - If you use a bootstrap theme, you can remove the allow-popups from the
+;   sandbox restrictions.
+; - By default this disallows to load images from third-party servers, e.g. when
+;   they are embedded in pastes. If you wish to allow that, you can adjust the
+;   policy here. See https://github.com/PrivateBin/PrivateBin/wiki/FAQ#why-does-not-it-load-embedded-images
+;   for details.
+; - The 'unsafe-eval' is used in two cases; to check if the browser supports
+;   async functions and display an error if not and for Chrome to enable
+;   webassembly support (used for zlib compression). You can remove it if Chrome
+;   doesn't need to be supported and old browsers don't need to be warned.
+; cspheader = "default-src 'none'; manifest-src 'self'; connect-src * blob:; script-src 'self' 'unsafe-eval' resource:; style-src 'self'; font-src 'self'; img-src 'self' data: blob:; media-src blob:; object-src blob:; sandbox allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads"
 
 ; stay compatible with PrivateBin Alpha 0.19, less secure
 ; if enabled will use base64.js version 1.7 instead of 2.1.9 and sha1 instead of
@@ -86,8 +103,8 @@ languageselection = false
 
 ; Pick compression algorithm or disable it. Only applies to pastes/comments
 ; created after changing the setting.
-; Can be set to one these values: none / zlib (default).
-; compression = zlib
+; Can be set to one these values: "none" / "zlib" (default).
+; compression = "zlib"
 
 [expire]
 ; expire value that is selected per default

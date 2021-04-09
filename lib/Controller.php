@@ -7,7 +7,7 @@
  * @link      https://github.com/PrivateBin/PrivateBin
  * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
  * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
- * @version   1.2.1
+ * @version   1.3.5
  */
 
 namespace PrivateBin;
@@ -28,14 +28,14 @@ class Controller
      *
      * @const string
      */
-    const VERSION = '1.2.1';
+    const VERSION = '1.3.5';
 
     /**
      * minimal required PHP version
      *
      * @const string
      */
-    const MIN_PHP_VERSION = '5.5.0';
+    const MIN_PHP_VERSION = '5.6.0';
 
     /**
      * show the same error message if the paste expired or does not exist
@@ -196,15 +196,20 @@ class Controller
      */
     private function _create()
     {
-        // Ensure last paste from visitors IP address was more than configured amount of seconds ago.
-        TrafficLimiter::setConfiguration($this->_conf);
-        if (!TrafficLimiter::canPass()) {
-            $this->_return_message(
-                1, I18n::_(
-                    'Please wait %d seconds between each post.',
-                    $this->_conf->getKey('limit', 'traffic')
-                )
-            );
+        try {
+            // Ensure last paste from visitors IP address was more than configured amount of seconds ago.
+            TrafficLimiter::setConfiguration($this->_conf);
+            if (!TrafficLimiter::canPass()) {
+                $this->_return_message(
+                    1, I18n::_(
+                        'Please wait %d seconds between each post.',
+                        $this->_conf->getKey('limit', 'traffic')
+                    )
+                );
+                return;
+            }
+        } catch (Exception $e) {
+            $this->_return_message(1, I18n::_($e->getMessage()));
             return;
         }
 
@@ -276,9 +281,7 @@ class Controller
                 // accessing this method ensures that the paste would be
                 // deleted if it has already expired
                 $paste->get();
-                if (
-                    Filter::slowEquals($deletetoken, $paste->getDeleteToken())
-                ) {
+                if (hash_equals($paste->getDeleteToken(), $deletetoken)) {
                     // Paste exists and deletion token is valid: Delete the paste.
                     $paste->delete();
                     $this->_status = 'Paste was properly deleted.';
@@ -366,6 +369,7 @@ class Controller
 
         $page = new View;
         $page->assign('NAME', $this->_conf->getKey('name'));
+        $page->assign('BASEPATH', I18n::_($this->_conf->getKey('basepath')));
         $page->assign('ERROR', I18n::_($this->_error));
         $page->assign('STATUS', I18n::_($this->_status));
         $page->assign('VERSION', self::VERSION);
@@ -376,6 +380,7 @@ class Controller
         $page->assign('SYNTAXHIGHLIGHTINGTHEME', $this->_conf->getKey('syntaxhighlightingtheme'));
         $page->assign('FORMATTER', $formatters);
         $page->assign('FORMATTERDEFAULT', $this->_conf->getKey('defaultformatter'));
+        $page->assign('INFO', I18n::_(str_replace("'", '"', $this->_conf->getKey('info'))));
         $page->assign('NOTICE', I18n::_($this->_conf->getKey('notice')));
         $page->assign('BURNAFTERREADINGSELECTED', $this->_conf->getKey('burnafterreadingselected'));
         $page->assign('PASSWORD', $this->_conf->getKey('password'));
@@ -388,6 +393,7 @@ class Controller
         $page->assign('URLSHORTENER', $this->_conf->getKey('urlshortener'));
         $page->assign('QRCODE', $this->_conf->getKey('qrcode'));
         $page->assign('HTTPWARNING', $this->_conf->getKey('httpwarning'));
+        $page->assign('HTTPSLINK', 'https://' . $this->_request->getHost() . $this->_request->getRequestUri());
         $page->assign('COMPRESSION', $this->_conf->getKey('compression'));
         $page->draw($this->_conf->getKey('template'));
     }

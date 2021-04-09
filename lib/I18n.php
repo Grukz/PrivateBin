@@ -7,7 +7,7 @@
  * @link      https://github.com/PrivateBin/PrivateBin
  * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
  * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
- * @version   1.2.1
+ * @version   1.3.5
  */
 
 namespace PrivateBin;
@@ -125,7 +125,29 @@ class I18n
         } else {
             $args[0] = self::$_translations[$messageId];
         }
+        // encode any non-integer arguments and the message ID, if it doesn't contain a link
+        $argsCount = count($args);
+        if ($argsCount > 1) {
+            for ($i = 0; $i < $argsCount; ++$i) {
+                if (($i > 0 && !is_int($args[$i])) || strpos($args[0], '<a') === false) {
+                    $args[$i] = self::encode($args[$i]);
+                }
+            }
+        }
         return call_user_func_array('sprintf', $args);
+    }
+
+    /**
+     * encode HTML entities for output into an HTML5 document
+     *
+     * @access public
+     * @static
+     * @param  string $string
+     * @return string
+     */
+    public static function encode($string)
+    {
+        return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5 | ENT_DISALLOWED, 'UTF-8', false);
     }
 
     /**
@@ -177,7 +199,6 @@ class I18n
                     self::$_availableLanguages[] = $match[1];
                 }
             }
-            self::$_availableLanguages[] = 'en';
         }
         return self::$_availableLanguages;
     }
@@ -300,13 +321,20 @@ class I18n
             case 'oc':
             case 'zh':
                 return $n > 1 ? 1 : 0;
+            case 'he':
+                return $n === 1 ? 0 : ($n === 2 ? 1 : (($n < 0 || $n > 10) && ($n % 10 === 0) ? 2 : 3));
+            case 'id':
+                return 0;
+            case 'lt':
+                return $n % 10 === 1 && $n % 100 !== 11 ? 0 : (($n % 10 >= 2 && $n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'pl':
                 return $n == 1 ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'ru':
+            case 'uk':
                 return $n % 10 == 1 && $n % 100 != 11 ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'sl':
                 return $n % 100 == 1 ? 1 : ($n % 100 == 2 ? 2 : ($n % 100 == 3 || $n % 100 == 4 ? 3 : 0));
-            // de, en, es, hu, it, nl, no, pt
+            // bg, ca, de, en, es, hu, it, nl, no, pt
             default:
                 return $n != 1 ? 1 : 0;
         }

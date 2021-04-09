@@ -34,6 +34,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
         /* Setup Routine */
         $page = new View;
         $page->assign('NAME', 'PrivateBinTest');
+        $page->assign('BASEPATH', '');
         $page->assign('ERROR', self::$error);
         $page->assign('STATUS', self::$status);
         $page->assign('VERSION', self::$version);
@@ -48,6 +49,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
         $page->assign('PASSWORD', true);
         $page->assign('FILEUPLOAD', false);
         $page->assign('ZEROBINCOMPATIBILITY', false);
+        $page->assign('INFO', 'example');
         $page->assign('NOTICE', 'example');
         $page->assign('LANGUAGESELECTION', '');
         $page->assign('LANGUAGES', I18n::getLanguageLabels(I18n::getAvailableLanguages()));
@@ -56,6 +58,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
         $page->assign('URLSHORTENER', '');
         $page->assign('QRCODE', true);
         $page->assign('HTTPWARNING', true);
+        $page->assign('HTTPSLINK', 'https://example.com/');
         $page->assign('COMPRESSION', 'zlib');
 
         $dir = dir(PATH . 'tpl');

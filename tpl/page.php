@@ -1,7 +1,7 @@
 <?php
 use PrivateBin\I18n;
 ?><!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo I18n::_('en'); ?>">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="robots" content="noindex" />
@@ -24,7 +24,7 @@ endif;
 <?php
 if ($QRCODE):
 ?>
-		<script async type="text/javascript" data-cfasync="false" src="js/kjua-0.6.0.js" integrity="sha512-GEEIHvphDt1NmaxzX8X1ZkBiGKXCv+Ofzwi8SMEH5wQVWqdGIvBO/fnxxKZ90RU1bVp6srS68nHIpZo6iVcG9g==" crossorigin="anonymous"></script>
+		<script async type="text/javascript" data-cfasync="false" src="js/kjua-0.9.0.js" integrity="sha512-CVn7af+vTMBd9RjoS4QM5fpLFEOtBCoB0zPtaqIDC7sF4F8qgUSRFQQpIyEDGsr6yrjbuOLzdf20tkHHmpaqwQ==" crossorigin="anonymous"></script>
 <?php
 endif;
 if ($ZEROBINCOMPATIBILITY):
@@ -34,7 +34,7 @@ if ($ZEROBINCOMPATIBILITY):
 endif;
 ?>
 		<script type="text/javascript" data-cfasync="false" src="js/zlib-1.2.11.js" integrity="sha512-Yey/0yoaVmSbqMEyyff3DIu8kCPwpHvHf7tY1AuZ1lrX9NPCMg87PwzngMi+VNbe4ilCApmePeuKT869RTcyCQ==" crossorigin="anonymous"></script>
-		<script type="text/javascript" data-cfasync="false" src="js/base-x-3.0.5.1.js" integrity="sha512-/zL3MWKMtl1IBF0URx3laql2jUw+rWfFFabNlILY/Qm+hUsQR/XULjUyNHkW/FkrV7A0sMQ7tsppH7sj5ht8wA==" crossorigin="anonymous"></script>
+		<script type="text/javascript" data-cfasync="false" src="js/base-x-3.0.7.js" integrity="sha512-/Bi1AJIP0TtxEB+Jh6Hk809H1G7vn4iJV80qagslf0+Hm0UjUi1s3qNrn1kZULjzUYuaf6ck0ndLGJ7MxWLmgQ==" crossorigin="anonymous"></script>
 		<script type="text/javascript" data-cfasync="false" src="js/rawinflate-0.3.js" integrity="sha512-g8uelGgJW9A/Z1tB6Izxab++oj5kdD7B4qC7DHwZkB6DGMXKyzx7v5mvap2HXueI2IIn08YlRYM56jwWdm2ucQ==" crossorigin="anonymous"></script>
 <?php
 if ($SYNTAXHIGHLIGHTING):
@@ -44,15 +44,14 @@ if ($SYNTAXHIGHLIGHTING):
 endif;
 if ($MARKDOWN):
 ?>
-		<script type="text/javascript" data-cfasync="false" src="js/showdown-1.9.0.js" integrity="sha512-Kv8oAge9h2QmRyzb52jUomyXAvSMrpE9kWF3QRMFajo1a/TXjtY8u71vUA6t4+LE7huz4TSVH8VLJBEmcZiPRA==" crossorigin="anonymous"></script>
+		<script type="text/javascript" data-cfasync="false" src="js/showdown-1.9.1.js" integrity="sha512-nRri7kqh3iRLdHbhtjfe8w9eAQPmt+ubH5U88UZyKbz6O9Q0q4haaXF0krOUclKmRJou/kKZYulgBHvHXPqOvg==" crossorigin="anonymous"></script>
 <?php
 endif;
 ?>
-		<script type="text/javascript" data-cfasync="false" src="js/purify-1.0.11.js" integrity="sha512-p7UyJuyBkhMcMgE4mDsgK0Lz70OvetLefua1oXs1OujWv9gOxh4xy8InFux7bZ4/DAZsTmO4rgVwZW9BHKaTaw==" crossorigin="anonymous"></script>
-		<script type="text/javascript" data-cfasync="false" src="js/privatebin.js?<?php echo rawurlencode($VERSION); ?>" integrity="sha512-Yq2HyT+H1PmQxCaDeh6E/ChOrTBSYsu8BuS4yb8UPHlyMVaxqSOtyfy6hx6vAsVT0G3bKeLRAuejhvPTOoz7fQ==" crossorigin="anonymous"></script>
-		<!--[if IE]>
-		<style type="text/css">body {padding-left:60px;padding-right:60px;} #ienotice {display:block;}</style>
-		<![endif]-->
+		<script type="text/javascript" data-cfasync="false" src="js/purify-2.2.7.js" integrity="sha512-7Ka1I/nJuR2CL8wzIS5PJS4HgEMd0HJ6kfAl6fFhwFBB27rhztFbe0tS+Ex+Qg+5n4nZIT4lty4k4Di3+X9T4A==" crossorigin="anonymous"></script>
+		<script type="text/javascript" data-cfasync="false" src="js/legacy.js?<?php echo rawurlencode($VERSION); ?>" integrity="sha512-LYos+qXHIRqFf5ZPNphvtTB0cgzHUizu2wwcOwcwz/VIpRv9lpcBgPYz4uq6jx0INwCAj6Fbnl5HoKiLufS2jg==" crossorigin="anonymous"></script>
+		<script type="text/javascript" data-cfasync="false" src="js/privatebin.js?<?php echo rawurlencode($VERSION); ?>" integrity="sha512-wuKnPu9+bTYhJ0HRhUmw0UxWYP5mbQehFNspkD9N4mTlxLkjRZXPnMt/nfT2/U62rRDUw1HL3SvveKJe2v4EBw==" crossorigin="anonymous"></script>
+		<!-- icon -->
 		<link rel="apple-touch-icon" href="img/apple-touch-icon.png?<?php echo rawurlencode($VERSION); ?>" sizes="180x180" />
 		<link rel="icon" type="image/png" href="img/favicon-32x32.png?<?php echo rawurlencode($VERSION); ?>" sizes="32x32" />
 		<link rel="icon" type="image/png" href="img/favicon-16x16.png?<?php echo rawurlencode($VERSION); ?>" sizes="16x16" />
@@ -61,34 +60,57 @@ endif;
 		<link rel="shortcut icon" href="img/favicon.ico">
 		<meta name="msapplication-config" content="browserconfig.xml">
 		<meta name="theme-color" content="#ffe57e" />
+		<!-- Twitter/social media cards -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="<?php echo I18n::_('Encrypted note on PrivateBin') ?>" />
+		<meta name="twitter:description" content="<?php echo I18n::_('Visit this link to see the note. Giving the URL to anyone allows them to access the note, too.') ?>" />
+		<meta name="twitter:image" content="img/apple-touch-icon.png?<?php echo rawurlencode($VERSION); ?>" />
+		<meta property="og:title" content="<?php echo I18n::_($NAME); ?>" />
+		<meta property="og:site_name" content="<?php echo I18n::_($NAME); ?>" />
+		<meta property="og:description" content="<?php echo I18n::_('Visit this link to see the note. Giving the URL to anyone allows them to access the note, too.') ?>" />
+		<meta property="og:image" content="img/apple-touch-icon.png?<?php echo rawurlencode($VERSION); ?>" />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:width" content="180" />
+		<meta property="og:image:height" content="180" />
 	</head>
 	<body data-compression="<?php echo rawurlencode($COMPRESSION); ?>">
 		<header>
 			<div id="aboutbox">
-				<?php echo I18n::_('%s is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted/decrypted <i>in the browser</i> using 256 bits AES. More information on the <a href="https://privatebin.info/">project page</a>.', I18n::_($NAME)); ?><br />
+				<?php echo sprintf(
+                    I18n::_('%s is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted/decrypted %sin the browser%s using 256 bits AES.',
+                        I18n::_($NAME),
+                        '%s', '%s'
+                    ),
+                    '<i>', '</i>'), ' ', $INFO;
+                ?>
+				<br />
 <?php
 if (strlen($NOTICE)):
 ?>
-				<span class="blink">▶</span> <?php echo htmlspecialchars($NOTICE);
+				<span class="blink">▶</span> <?php echo I18n::encode($NOTICE);
 endif;
 ?>
 			</div>
 			<h1 class="title reloadlink"><?php echo I18n::_($NAME); ?></h1><br />
 			<h2 class="title"><?php echo I18n::_('Because ignorance is bliss'); ?></h2><br />
 			<h3 class="title"><?php echo $VERSION; ?></h3>
-			<noscript><div id="noscript" class="nonworking"><?php echo I18n::_('JavaScript is required for %s to work.<br />Sorry for the inconvenience.', I18n::_($NAME)); ?></div></noscript>
-			<div id="oldnotice" class="nonworking"><?php echo I18n::_('%s requires a modern browser to work.', I18n::_($NAME)); ?></div>
-			<div id="ienotice" class="nonworking"><?php echo I18n::_('Still using Internet Explorer? Do yourself a favor, switch to a modern browser:'), PHP_EOL; ?>
+			<noscript><div id="noscript" class="nonworking"><?php echo I18n::_('JavaScript is required for %s to work. Sorry for the inconvenience.', I18n::_($NAME)); ?></div></noscript>
+			<div id="oldnotice" class="nonworking hidden">
+				<?php echo I18n::_('%s requires a modern browser to work.', I18n::_($NAME)), PHP_EOL; ?>
 				<a href="https://www.mozilla.org/firefox/">Firefox</a>,
 				<a href="https://www.opera.com/">Opera</a>,
-				<a href="https://www.google.com/chrome">Chrome</a>…
+				<a href="https://www.google.com/chrome">Chrome</a>…<br />
+				<span class="small"><?php echo I18n::_('For more information <a href="%s">see this FAQ entry</a>.', 'https://github.com/PrivateBin/PrivateBin/wiki/FAQ#why-does-it-show-me-the-error-privatebin-requires-a-modern-browser-to-work'); ?></span>
 			</div>
 <?php
 if ($HTTPWARNING):
 ?>
-			<div id="httpnotice" class="errorMessage">
-				<?php echo I18n::_('This website is using an insecure connection! Please only use it for testing.'); ?>
+			<div id="httpnotice" class="errorMessage hidden">
+				<?php echo I18n::_('This website is using an insecure connection! Please only use it for testing.'); ?><br />
 				<span class="small"><?php echo I18n::_('For more information <a href="%s">see this FAQ entry</a>.', 'https://github.com/PrivateBin/PrivateBin/wiki/FAQ#why-does-it-show-me-an-error-about-an-insecure-connection'); ?></span>
+			</div>
+			<div id="insecurecontextnotice" class="errorMessage hidden">
+				<?php echo I18n::_('Your browser may require an HTTPS connection to support the WebCrypto API. Try <a href="%s">switching to HTTPS</a>.', $HTTPSLINK); ?>
 			</div>
 <?php
 endif;
@@ -97,14 +119,15 @@ endif;
 		<section>
 			<article>
 				<div id="loadingindicator" class="hidden"><?php echo I18n::_('Loading…'); ?></div>
-				<div id="status"><?php echo htmlspecialchars($STATUS); ?></div>
-				<div id="errormessage" class="hidden"><?php echo htmlspecialchars($ERROR); ?></div>
+				<div id="status"><?php echo I18n::encode($STATUS); ?></div>
+				<div id="errormessage" class="hidden"><?php echo I18n::encode($ERROR); ?></div>
 				<div id="toolbar">
 					<button id="newbutton" class="reloadlink hidden"><img src="img/icon_new.png" width="11" height="15" alt="" /><?php echo I18n::_('New'); ?></button>
 					<button id="retrybutton" class="reloadlink hidden"><?php echo I18n::_('Retry'), PHP_EOL; ?></button>
 					<button id="sendbutton" class="hidden"><img src="img/icon_send.png" width="18" height="15" alt="" /><?php echo I18n::_('Send'); ?></button>
 					<button id="clonebutton" class="hidden"><img src="img/icon_clone.png" width="15" height="17" alt="" /><?php echo I18n::_('Clone'); ?></button>
 					<button id="rawtextbutton" class="hidden"><img src="img/icon_raw.png" width="15" height="15" alt="" /><?php echo I18n::_('Raw text'); ?></button>
+					<button id="emaillink" class="hidden"><img src="img/icon_email.png" width="15" height="15" alt="" /><?php echo I18n::_('Email'); ?></button>
 <?php
 if ($QRCODE):
 ?>
@@ -206,7 +229,7 @@ endif;
 <?php
 if (strlen($URLSHORTENER)):
 ?>
-					<button id="shortenbutton" data-shortener="<?php echo htmlspecialchars($URLSHORTENER); ?>"><img src="img/icon_shorten.png" width="13" height="15" /><?php echo I18n::_('Shorten URL'); ?></button>
+					<button id="shortenbutton" data-shortener="<?php echo I18n::encode($URLSHORTENER); ?>"><img src="img/icon_shorten.png" width="13" height="15" /><?php echo I18n::_('Shorten URL'); ?></button>
 <?php
 endif;
 ?>
@@ -255,10 +278,17 @@ if ($DISCUSSION):
 <?php
 endif;
 ?>
+<?php
+if ($FILEUPLOAD):
+?>
+		<div id="dropzone" class="hidden" tabindex="-1" aria-hidden="true"></div>
+<?php
+endif;
+?>
 		<section class="container">
 			<div id="noscript" role="alert" class="nonworking alert alert-info noscript-hide"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">
 				<span> <?php echo I18n::_('Loading…'); ?></span><br>
-				<span class="small"><?php echo I18n::_('In case this message never disappears please have a look at <a href="https://github.com/PrivateBin/PrivateBin/wiki/FAQ#why-does-not-the-loading-message-go-away">this FAQ for information to troubleshoot</a>.'); ?></span>
+				<span class="small"><?php echo I18n::_('In case this message never disappears please have a look at <a href="%s">this FAQ for information to troubleshoot</a>.', 'https://github.com/PrivateBin/PrivateBin/wiki/FAQ#why-does-the-loading-message-not-go-away'); ?></span>
 			</div>
 		</section>
 	</body>

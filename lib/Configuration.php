@@ -7,7 +7,7 @@
  * @link      https://github.com/PrivateBin/PrivateBin
  * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
  * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
- * @version   1.2.1
+ * @version   1.3.5
  */
 
 namespace PrivateBin;
@@ -38,6 +38,7 @@ class Configuration
     private static $_defaults = array(
         'main' => array(
             'name'                     => 'PrivateBin',
+            'basepath'                 => '',
             'discussion'               => true,
             'opendiscussion'           => false,
             'password'                 => true,
@@ -45,15 +46,16 @@ class Configuration
             'burnafterreadingselected' => false,
             'defaultformatter'         => 'plaintext',
             'syntaxhighlightingtheme'  => null,
-            'sizelimit'                => 2097152,
+            'sizelimit'                => 10485760,
             'template'                 => 'bootstrap',
+            'info'                     => 'More information on the <a href=\'https://privatebin.info/\'>project page</a>.',
             'notice'                   => '',
             'languageselection'        => false,
             'languagedefault'          => '',
             'urlshortener'             => '',
             'qrcode'                   => true,
             'icon'                     => 'identicon',
-            'cspheader'                => 'default-src \'none\'; manifest-src \'self\'; connect-src *; script-src \'self\' \'unsafe-eval\'; style-src \'self\'; font-src \'self\'; img-src \'self\' data: blob:; media-src blob:; object-src blob:; sandbox allow-same-origin allow-scripts allow-forms allow-popups allow-modals',
+            'cspheader'                => 'default-src \'none\'; manifest-src \'self\'; connect-src * blob:; script-src \'self\' \'unsafe-eval\' resource:; style-src \'self\'; font-src \'self\'; img-src \'self\' data: blob:; media-src blob:; object-src blob:; sandbox allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads',
             'zerobincompatibility'     => false,
             'httpwarning'              => true,
             'compression'              => 'zlib',
@@ -102,8 +104,9 @@ class Configuration
     public function __construct()
     {
         $config     = array();
-        $configFile = PATH . 'cfg' . DIRECTORY_SEPARATOR . 'conf.php';
-        $configIni  = PATH . 'cfg' . DIRECTORY_SEPARATOR . 'conf.ini';
+        $basePath   = (getenv('CONFIG_PATH') !== false ? getenv('CONFIG_PATH') : PATH . 'cfg') . DIRECTORY_SEPARATOR;
+        $configIni  = $basePath . 'conf.ini';
+        $configFile = $basePath . 'conf.php';
 
         // rename INI files to avoid configuration leakage
         if (is_readable($configIni)) {
@@ -112,7 +115,7 @@ class Configuration
             // cleanup sample, too
             $configIniSample = $configIni . '.sample';
             if (is_readable($configIniSample)) {
-                DataStore::prependRename($configIniSample, PATH . 'cfg' . DIRECTORY_SEPARATOR . 'conf.sample.php', ';');
+                DataStore::prependRename($configIniSample, $basePath . 'conf.sample.php', ';');
             }
         }
 

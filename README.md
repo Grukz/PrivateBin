@@ -1,13 +1,6 @@
-# [<img alt="PrivateBin" src="https://cdn.rawgit.com/PrivateBin/assets/master/images/minified/logo.svg" width="500" />](https://privatebin.info/)
-[![Build Status](https://travis-ci.org/PrivateBin/PrivateBin.svg?branch=master)](https://travis-ci.org/PrivateBin/PrivateBin) [![Build Status](https://scrutinizer-ci.com/g/PrivateBin/PrivateBin/badges/build.png?b=master)](https://scrutinizer-ci.com/g/PrivateBin/PrivateBin/build-status/master)  
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/094500f62abf4c9aa0c8a8a4520e4789)](https://www.codacy.com/app/PrivateBin/PrivateBin)
-[![Code Climate](https://codeclimate.com/github/PrivateBin/PrivateBin/badges/gpa.svg)](https://codeclimate.com/github/PrivateBin/PrivateBin)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/PrivateBin/PrivateBin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PrivateBin/PrivateBin/?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/57c9e74e-c6f9-4de6-a876-df66ec2ea1ff/mini.png)](https://insight.sensiolabs.com/projects/57c9e74e-c6f9-4de6-a876-df66ec2ea1ff)  
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/094500f62abf4c9aa0c8a8a4520e4789)](https://www.codacy.com/app/PrivateBin/PrivateBin)
-[![Test Coverage](https://codeclimate.com/github/PrivateBin/PrivateBin/badges/coverage.svg)](https://codeclimate.com/github/PrivateBin/PrivateBin/coverage) [![Code Coverage](https://scrutinizer-ci.com/g/PrivateBin/PrivateBin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/PrivateBin/PrivateBin/?branch=master)
+# [![PrivateBin](https://cdn.rawgit.com/PrivateBin/assets/master/images/preview/logoSmall.png)](https://privatebin.info/)
 
-*Current version: 1.2.1*
+*Current version: 1.3.5*
 
 **PrivateBin** is a minimalist, open source online [pastebin](https://en.wikipedia.org/wiki/Pastebin)
 where the server has zero knowledge of pasted data.
@@ -44,9 +37,7 @@ without losing any data.
   Otherwise you would also have to trust your internet provider, and any country
   the traffic passes through.
   Additionally the instance should be secured by
-  [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) and
-  ideally by [HPKP](https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning) using a
-  certificate. It can use traditional certificate authorities and/or use
+  [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security). It can use traditional certificate authorities and/or use
   [DNSSEC](https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions)
   protected
   [DANE](https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities)
@@ -102,9 +93,9 @@ file](https://github.com/PrivateBin/PrivateBin/wiki/Configuration):
 
 ## Further resources
 
-* [Installation guide](https://github.com/PrivateBin/PrivateBin/blob/master/INSTALL.md#installation)
+* [FAQ](https://github.com/PrivateBin/PrivateBin/wiki/FAQ)
 
-* [Upgrading from ZeroBin 0.19 Alpha](https://github.com/PrivateBin/PrivateBin/wiki/Upgrading-from-ZeroBin-0.19-Alpha)
+* [Installation guide](https://github.com/PrivateBin/PrivateBin/blob/master/INSTALL.md#installation)
 
 * [Configuration guide](https://github.com/PrivateBin/PrivateBin/wiki/Configuration)
 

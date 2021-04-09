@@ -7,7 +7,7 @@ global.jsdom = require('jsdom-global');
 global.cleanup = global.jsdom();
 global.URL = require('jsdom-url').URL;
 global.fs = require('fs');
-global.WebCrypto = require('node-webcrypto-ossl');
+global.WebCrypto = require('@peculiar/webcrypto').Crypto;
 
 // application libraries to test
 global.$ = global.jQuery = require('./jquery-3.4.1');
@@ -16,9 +16,10 @@ global.zlib = require('./zlib-1.2.11').zlib;
 require('./prettify');
 global.prettyPrint = window.PR.prettyPrint;
 global.prettyPrintOne = window.PR.prettyPrintOne;
-global.showdown = require('./showdown-1.9.0');
-global.DOMPurify = require('./purify-1.0.11');
-global.baseX = require('./base-x-3.0.5.1').baseX;
+global.showdown = require('./showdown-1.9.1');
+global.DOMPurify = require('./purify-2.2.7');
+global.baseX = require('./base-x-3.0.7').baseX;
+global.Legacy = require('./legacy').Legacy;
 require('./bootstrap-3.3.7');
 require('./privatebin');
 
@@ -35,25 +36,10 @@ var a2zString    = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
             return c.toUpperCase();
         })
     ),
-    schemas = ['ftp','gopher','http','https','ws','wss'],
+    schemas = ['ftp','http','https'],
     supportedLanguages = ['de', 'es', 'fr', 'it', 'no', 'pl', 'pt', 'oc', 'ru', 'sl', 'zh'],
     mimeTypes = ['image/png', 'application/octet-stream'],
     formats = ['plaintext', 'markdown', 'syntaxhighlighting'],
-    /**
-     * character to HTML entity lookup table
-     *
-     * @see    {@link https://github.com/janl/mustache.js/blob/master/mustache.js#L60}
-     */
-    entityMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '/': '&#x2F;',
-        '`': '&#x60;',
-        '=': '&#x3D;'
-    },
     mimeFile = fs.createReadStream('/etc/mime.types'),
     mimeLine = '';
 
@@ -95,22 +81,6 @@ function parseMime(line) {
 // common testing helper functions
 exports.atob = atob;
 exports.btoa = btoa;
-
-/**
- * convert all applicable characters to HTML entities
- *
- * @see    {@link https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet#RULE_.231_-_HTML_Escape_Before_Inserting_Untrusted_Data_into_HTML_Element_Content}
- * @name   htmlEntities
- * @function
- * @param  {string} str
- * @return {string} escaped HTML
- */
-exports.htmlEntities = function(str) {
-    return String(str).replace(
-        /[&<>"'`=\/]/g, function(s) {
-            return entityMap[s];
-        });
-};
 
 // provides random lowercase characters from a to z
 exports.jscA2zString = function() {
